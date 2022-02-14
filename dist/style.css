@@ -1,0 +1,17 @@
+.header {
+    color: white;
+    background-color: red;
+}
+
+.container {
+    background-color: grey;
+}
+
+.card-header {
+    background-color: #0077ff;
+    color: white;
+}
+
+ul {
+    background-color: white;
+}
