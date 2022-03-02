@@ -1,34 +1,30 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
+const manager = require('./lib/manager.js')
+const engineer = require('./lib/engineer.js')
+const intern = require('./lib/inter.js')
 
-// const Employee = require('./lib/employee-profile.js')
-
-const promptUser = () => {
+const prompt = () => {
   return inquirer.prompt([
       {
           type: 'input',
-          name: 'name',
+          name: 'employeeName',
           message: 'What is your team managers name?',
       },
       {
           type: 'input',
-          name: 'id',
+          name: 'employeeId',
           message: 'What is your team managers employee ID?',
       },
       {
-          type: 'input',
-          name: 'title',
-          message: 'What is your team managers title?',
-      },
-      {
         type: 'input',
-        name: 'email',
+        name: 'employeeEmail',
         message: 'What is your team managers email?',
       },
   ]);
 }
 
-const generateHTML = ({ name, id, title, email }) => 
+const generateHTML = ({ employeeName, employeeId, employeeEmail }) => 
 `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,20 +38,20 @@ const generateHTML = ({ name, id, title, email }) =>
   <h1>My team</h1>
   <div class="card-deck">
     <div class="card">
-      <div class="card-header" id="name">${name}</div>
-      <div class="list-group-item" id="title">${title}</div>
+      <div class="card-header" id="name">${employeeName}</div>
+      <div class="list-group-item" id="title">Employee</div>
       <ul class="list-group">
-        <li class="list-group-item">ID: ${id}</li>
-        <li class="list-group-item">Email: <a href="mailto:${email}</a></li>
+        <li class="list-group-item">ID: ${employeeId}</li>
+        <li class="list-group-item">Email: <a href="mailto:${employeeEmail}></a></li>
       </ul>
     </div>
   </div>
-</div>
 </body>
 </html>`;
 
+
 const init = () => {
-    promptUser()
+    prompt()
         .then((answers) => fs.writeFileSync('index.html', generateHTML(answers)))
         .then(() => console.log('Successfully wrote to index.html'))
         .catch((err) => console.error(err));
