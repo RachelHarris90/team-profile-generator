@@ -1,11 +1,12 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const Manager = require('./lib/manager');
-const Employee = require('./lib/employee');
+const Engineer = require('./lib/engineer');
+const Intern = require('./lib/intern');
 
 
-const generateHTML = ({ name, id, email, officeNumber }) => 
-`<!DOCTYPE html>
+const generateHTML = (employees) => {
+const header = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -16,18 +17,38 @@ const generateHTML = ({ name, id, email, officeNumber }) =>
 <body>
   <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">My team</h1>
-    <ul class="list-group pb-3">
-      <li class="list-group-item"><a id="title"></a>Manager</li>
-      <li class="list-group-item"><a id="name"></a>${name}</li>
-      <li class="list-group-item"><a href="#id"></a>${id}</li>
-      <li class="list-group-item"><a href="mailto:${email}">${email}</a></li>
-      <li class="list-group-item"><a href="#id"></a>${officeNumber}</li>
-    </ul>
-  </div>
-</div>
-</body>
-</html>`;
+    <h1 class="display-4">My team</h1>`;
+
+    let body = "";
+    for(i=0; i < employees.length; i++) {
+      let additionalInfo = { label:"office number", data:""};
+      switch (employees[i].role) {
+        case "Manager":
+          additionalInfo.data = employees[i].officeNumber;
+          additionalInfo.label = "Office number";
+        break;
+        case "Engineer":
+          additionalInfo.data = `<a href="https://github.com/${employees[i].github}">Github</a>`;
+          additionalInfo.label = "Github profile";
+        break;
+        case "Intern":
+          additionalInfo.data = employees[i].school;
+          additionalInfo.label = "School";
+        break;
+      }
+      body+=`<ul class="list-group pb-3">
+      <li class="list-group-item">${employees[i].role}</li>
+      <li class="list-group-item">${employees[i].name}</li>
+      <li class="list-group-item">${employees[i].id}</li>
+      <li class="list-group-item"><a href="mailto:${employees[i].email}">${employees[i].email}</a></li>
+      <li class="list-group-item"><a href="#id">${additionalInfo.label}</a>${additionalInfo.data}</li>
+    </ul>`
+    }
+
+const footer = `</div> </div> </body> </html>`
+
+fs.writeFileSync('index.html', (header + body + footer));
+}
 
 let employees = []
 
@@ -67,6 +88,20 @@ function addEmployee() {
           ]).then((answers) => {
             const {name, id, email, github} = answers;
             employees.push(new Engineer(name, id, email, github));
+            inquirer.prompt([
+              {
+                type: 'list',
+                name: 'add',
+                message: 'Add another employee?',
+                choices: ['Yes', 'No']
+              },
+            ]).then((answers) => {
+              if (answers.add == 'Yes') {
+                addEmployee();
+              } else {
+                console.log(employees)
+              }
+            })
           });
         break;
         case 'Intern':
@@ -94,23 +129,23 @@ function addEmployee() {
           ]).then((answers) => {
             const {name, id, email, school} = answers;
             employees.push(new Intern(name, id, email, school));
+            inquirer.prompt([
+              {
+                type: 'list',
+                name: 'add',
+                message: 'Add another employee?',
+                choices: ['Yes', 'No']
+              },
+            ]).then((answers) => {
+              if (answers.add == 'Yes') {
+                addEmployee();
+              } else {
+                generateHTML(employees);
+              }
+            })
           });
         break;
       }
-    inquirer.prompt([
-      {
-        type: 'list',
-        name: 'add',
-        message: 'Add another employee?',
-        choices: ['Yes', 'No']
-      },
-    ]).then((answers) => {
-      if (answers.add == 'Yes') {
-        addEmployee();
-      } else {
-        console.log(employees)
-      }
-    })
   })
 }
 
@@ -142,10 +177,6 @@ const init = () => {
     addEmployee();
   })
 
-
-  // .then((answers) => fs.writeFileSync('index.html', generateHTML(answers)))
-  // .then(() => console.log('Successfully wrote to index.html'))
-  // .catch((err) => console.error(err));
 };
 
 init();
