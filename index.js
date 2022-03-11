@@ -1,58 +1,54 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const manager = require('./lib/manager.js')
-const engineer = require('./lib/engineer.js')
-const intern = require('./lib/inter.js')
 
-const prompt = () => {
-  return inquirer.prompt([
-      {
-          type: 'input',
-          name: 'employeeName',
-          message: 'What is your team managers name?',
-      },
-      {
-          type: 'input',
-          name: 'employeeId',
-          message: 'What is your team managers employee ID?',
-      },
-      {
-        type: 'input',
-        name: 'employeeEmail',
-        message: 'What is your team managers email?',
-      },
-  ]);
+const promptUse = () => {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is your team managers name?',
+        },
+        {
+            type: 'input',
+            name: 'id',
+            message: 'What is your team managers employee ID?',
+        },
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is your team managers title?',
+        },
+    ]);
 }
 
-const generateHTML = ({ employeeName, employeeId, employeeEmail }) => 
+const generateHTML = ({ name, id, title}) => 
 `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <title>My team</title>
-  <link rel="stylesheet" href="./dist/style.css"/>
+  <title>Document</title>
 </head>
 <body>
-  <h1>My team</h1>
-  <div class="card-deck">
-    <div class="card">
-      <div class="card-header" id="name">${employeeName}</div>
-      <div class="list-group-item" id="title">Employee</div>
-      <ul class="list-group">
-        <li class="list-group-item">ID: ${employeeId}</li>
-        <li class="list-group-item">Email: <a href="mailto:${employeeEmail}></a></li>
-      </ul>
-    </div>
+  <div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">"My team"</h1>
+    <ul class="list-group pb-3">
+      <li class="list-group-item"><a id="name"></a></li>
+      <li class="list-group-item"><a id="title"></a></li>
+      <li class="list-group-item"><a href="#id"></a></li>
+      <li class="list-group-item"><a href="mailto:${email}">${email}</a></li>
+      <li class="list-group-item"><a href="https://github.com/${github}">${github}.</a></a></li>
+    </ul>
   </div>
+</div>
 </body>
 </html>`;
 
-
 const init = () => {
-    prompt()
-        .then((answers) => fs.writeFileSync('index.html', generateHTML(answers)))
+    promptUser()
+        .then((answer) => fs.writeFileSync('index.html', generateHTML(answers)))
         .then(() => console.log('Successfully wrote to index.html'))
         .catch((err) => console.error(err));
 };

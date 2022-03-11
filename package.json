@@ -1,5 +1,5 @@
 {
-  "name": "team-profile-generator",
+  "name": "npm",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,5 +13,19 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "inquirer": "^8.2.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RachelHarris90/team-profile-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RachelHarris90/team-profile-generator/issues"
+  },
+  "homepage": "https://github.com/RachelHarris90/team-profile-generator#readme",
+  "keywords": []
 }
