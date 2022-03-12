@@ -41,8 +41,7 @@ To use this application, ensure the dependencies are installed.
 3. Add your team employees details by following the prompts
 
 ## Demonstration
-Watch the [walkthrough video](https://drive.google.com/file/d/1cRquQ4eXVRrCe-kG9mB6zeDFszw0cKIj/view)
-
+Watch the [walkthrough video](https://drive.google.com/file/d/1cRquQ4eXVRrCe-kG9mB6zeDFszw0cKIj/view) to see the application in use 
 
 ![Example of command-line](/assets/command-line-example.png)
 
@@ -56,3 +55,5 @@ Not licensed.
 
 ## Tests
 This code is unit tested using Jest.
+
+Watch the [test demonstration video](https://drive.google.com/file/d/12ZCdzT6RU65C4TGzQZ_9V03gju3mS7zl/view) to see tests run and passing
