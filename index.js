@@ -12,12 +12,13 @@ const header = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <title>Document</title>
+  <title>Team Profile</title>
 </head>
 <body>
   <div class="jumbotron jumbotron-fluid">
+  <h1 class="display-4 text-center">My team</h1>
   <div class="container">
-    <h1 class="display-4">My team</h1>`;
+    <div class="row">`;
 
     let body = "";
     for(i=0; i < employees.length; i++) {
@@ -25,27 +26,32 @@ const header = `<!DOCTYPE html>
       switch (employees[i].role) {
         case "Manager":
           additionalInfo.data = employees[i].officeNumber;
-          additionalInfo.label = "Office number";
+          additionalInfo.label = "Office number: ";
         break;
         case "Engineer":
-          additionalInfo.data = `<a href="https://github.com/${employees[i].github}">Github</a>`;
-          additionalInfo.label = "Github profile";
+          additionalInfo.data = `<a href="https://github.com/${employees[i].github}">${employees[i].github}</a>`;
+          additionalInfo.label = "Github profile: ";
         break;
         case "Intern":
           additionalInfo.data = employees[i].school;
-          additionalInfo.label = "School";
+          additionalInfo.label = "School: ";
         break;
       }
-      body+=`<ul class="list-group pb-3">
-      <li class="list-group-item">${employees[i].role}</li>
-      <li class="list-group-item">${employees[i].name}</li>
-      <li class="list-group-item">${employees[i].id}</li>
-      <li class="list-group-item"><a href="mailto:${employees[i].email}">${employees[i].email}</a></li>
-      <li class="list-group-item"><a href="#id">${additionalInfo.label}</a>${additionalInfo.data}</li>
-    </ul>`
+      body+=`
+        <div class="card m-3 col p-0">
+          <div class="bg-primary text-white p-3">
+            <h4>${employees[i].name}</h4>
+            <h5>${employees[i].role}</h5>
+          </div>
+          <ul class="list-group m-3">
+            <li class="list-group-item">ID: ${employees[i].id}</li>
+            <li class="list-group-item">Email: <a href="mailto:${employees[i].email}">${employees[i].email}</a></li>
+            <li class="list-group-item">${additionalInfo.label}</a>${additionalInfo.data}</li>
+          </ul>
+      </div>`
     }
 
-const footer = `</div> </div> </body> </html>`
+const footer = `</div></div></div></body> </html>`
 
 fs.writeFileSync('index.html', (header + body + footer));
 }
@@ -57,7 +63,7 @@ function addEmployee() {
     {
         type: 'list',
         name: 'type',
-        message: 'What type of employee?',
+        message: 'What type of employee would you like to add next?',
         choices: ['Engineer', 'Intern']
     },
 
@@ -92,14 +98,15 @@ function addEmployee() {
               {
                 type: 'list',
                 name: 'add',
-                message: 'Add another employee?',
+                message: 'Would you like to add another employee?',
                 choices: ['Yes', 'No']
               },
             ]).then((answers) => {
               if (answers.add == 'Yes') {
                 addEmployee();
               } else {
-                console.log(employees)
+                generateHTML(employees);
+                console.log("Successfully generated HTML");
               }
             })
           });
@@ -133,7 +140,7 @@ function addEmployee() {
               {
                 type: 'list',
                 name: 'add',
-                message: 'Add another employee?',
+                message: 'Would you like to add another employee?',
                 choices: ['Yes', 'No']
               },
             ]).then((answers) => {
@@ -141,6 +148,7 @@ function addEmployee() {
                 addEmployee();
               } else {
                 generateHTML(employees);
+                console.log("Successfully generated HTML");
               }
             })
           });
@@ -176,7 +184,6 @@ const init = () => {
     employees.push(new Manager(name, id, email, officeNumber));
     addEmployee();
   })
-
 };
 
 init();
